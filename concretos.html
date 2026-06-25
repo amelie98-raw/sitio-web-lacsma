@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LACSMA | Corporativo de Calidad y Ensayos de Materiales S.A. de C.V</title>
+  <meta name="description"
+    content="Corporativo de Calidad y Ensayos de Materiales S.A. de C.V">
+  <meta property="og:description" content="Análisis y verificación de materiales para la construcción." />
+  <meta property="og:image" content="https://www.lacsma.com/assets/img/icon/Pat1.webp" />
+  <meta property="og:url" content="https://www.lacsma.com" />
+  <meta name="google-site-verification" content="JpkveYw6j71CssFyLHKTZXr5G9u0O4o76n-1fP68Lyc" />
+  <link rel="icon" type="image/x-icon" href="assets/img/icon/fav.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/img/icon/apple-touch-icon.png">
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+
+  <link href="https://fonts.googleapis.com/css2?family=Teko:wght@400&family=Inter:wght@400;500&display=swap"
+    rel="stylesheet" />
+
+  <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+
+<body>
+
+  <header id="navbar"></header>
+
+  <main>
+
+    <div id="banner-service"></div>
+
+    <section class="lacsma-section py-5">
+      <div class="container-fluid px-4 px-lg-5">
+
+        <div id="cards-container" class="row g-4 justify-content-center">
+        </div>
+
+        <div id="button-load-more"></div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <footer id="footer"></footer>
+
+  <script>
+    // 1. Cargar Navbar
+    fetch("components/navbar.html")
+      .then(res => res.text())
+      .then(data => {
+        document.getElementById("navbar").innerHTML = data;
+      })
+      .catch(error => console.error("Error cargando el navbar:", error));
+
+    // 2. Cargar Banner Principal de Concretos optimizado
+    fetch("components/banner.html")
+      .then(res => res.text())
+      .then(data => {
+        const contenedorBanner = document.getElementById("banner-service");
+        contenedorBanner.innerHTML = data;
+
+        const tituloBanner = contenedorBanner.querySelector(".banner__title");
+        const subtituloBanner = contenedorBanner.querySelector(".banner__description");
+        const imagenBanner = contenedorBanner.querySelector(".banner__photo");
+
+        if (tituloBanner) {
+          tituloBanner.textContent = "Concretos";
+        }
+        if (subtituloBanner) {
+          subtituloBanner.innerHTML = `
+            <span class="punto-color">&bull;</span> 
+            Análisis y verificación de las mezclas de concreto utilizadas en la construcción para garantizar su calidad y
+            cumplimiento con los estándares normativos.`;
+        }
+
+        if (imagenBanner) {
+          // Ocultamos el elemento img momentáneamente para que no parpadee
+          imagenBanner.style.opacity = "0";
+          imagenBanner.style.transition = "opacity 0.2s ease-in-out";
+
+          // Inyectamos la imagen correcta
+          imagenBanner.src = "assets/img/muestras.webp";
+          imagenBanner.alt = "Concretos - LACSMA";
+          imagenBanner.setAttribute("width", "1920");
+          imagenBanner.setAttribute("height", "450");
+
+          // Cuando cargue la foto de internet, se desvanece suavemente sobre el gris
+          imagenBanner.onload = function () {
+            imagenBanner.style.opacity = "1";
+          };
+
+          if (imagenBanner.complete) {
+            imagenBanner.style.opacity = "1";
+          }
+        }
+      })
+      .catch(error => console.error("Error cargando el banner:", error));
+
+
+    // 3. Cargar el componente Botón Ver Más de forma dinámica
+    fetch("components/boton-ver-mas.html")
+      .then(res => res.text())
+      .then(data => {
+        document.getElementById("button-load-more").innerHTML = data;
+      })
+      .catch(error => console.error("Error cargando el componente boton-ver-mas:", error));
+
+    // 4. Cargar el componente del Footer de forma dinámica
+    fetch("components/footer.html")
+      .then(res => res.text())
+      .then(data => {
+        document.getElementById("footer").innerHTML = data;
+      })
+      .catch(error => console.error("Error cargando el componente del footer:", error));
+
+    // 5. LISTADO DE SERVICIOS AUTOMÁTICAMENTE
+    const listadoServicios = [
+      {
+        title: "Muestreo de concreto fresco",
+        desc: "Consiste en la obtención de muestras representativas de concreto fresco directamente en obra. Un muestreo adecuado permite que los resultados de los ensayos reflejen con precisión las características reales del concreto suministrado.<br><span class='text-normativa'>Normatividad aplicable: NMX - C - 161 - ONNCCE, ASTM C172.</span>",
+        img: "assets/img/muestreo.webp",
+        width: "400",  
+        height: "250" 
+
+      },
+      {
+        title: "Morteros",
+        desc: "Los ensayos de mortero permiten determinar propiedades como resistencia, consistencia y comportamiento mecánico del material utilizado para unir elementos de mampostería o realizar recubrimientos. Los resultados ayudan a verificar que el mortero cumpla con los requisitos de desempeño establecidos para el proyecto.",
+        img: "assets/img/morteros.webp",
+         width: "400",  
+        height: "250" 
+      },
+      {
+        title: "Agregados",
+        desc: "Los agregados constituyen aproximadamente entre el 60 y 80 % del volumen del concreto, por lo que sus características influyen directamente en la calidad del producto final. Mediante diferentes pruebas se determinan sus propiedades permitiendo evaluar su aptitud para su uso en concreto, mortero o mezclas asfálticas.<br><span class='text-normativa'>Normatividad aplicable: NMX-C-077-ONNCCE, ASTM C136; NMX-C-111-ONNCCE, ASTM C127; NMX-C-165-ONNCCE, ASTM C128.</span>",
+        img: "assets/img/agregar.jpg",
+         width: "400",  
+        height: "250" 
+      },
+      {
+        title: "Extracción de corazones",
+        desc: "Consiste en la obtención de muestras cilíndricas de concreto endurecido mediante perforación diamantada. Los núcleos extraídos permiten determinar la resistencia a la compresión del concreto colocado en elementos estructurales y evaluar su calidad cuando existen dudas sobre su desempeño o cumplimiento de especificaciones.<br><span class='text-normativa'>Normatividad aplicable: NMX-C-169-ONNCCE, ASTM C42.</span>",
+        img: "assets/img/corazones.webp",
+         width: "400",  
+        height: "250" 
+      },
+      {
+        title: "Bloques y tabiques",
+        desc: "Estas pruebas permiten verificar la calidad de piezas de mampostería mediante la determinación de propiedades como resistencia a la compresión, absorción de agua y dimensiones. Los resultados ayudan a comprobar que los materiales cumplen con los requisitos establecidos para su uso en construcción.<br><span class='text-normativa'>Normatividad aplicable: NMX-C-404-ONNCCE.</span>",
+        img: "assets/img/bloques.jpg",
+         width: "400",  
+        height: "250" 
+      },
+      {
+        title: "Esclerómetro",
+        desc: "Es una prueba no destructiva utilizada para estimar la resistencia superficial del concreto mediante la medición del rebote producido por un impacto controlado.<br><span class='text-normativa'>Normatividad aplicable: ASTM C805, NMX-C-192-ONNCCE.</span>",
+        img: "assets/img/esclerometro.webp",
+         width: "400",  
+        height: "250" 
+      }
+    ];
+
+    // 6. Jalamos el molde único de tu card-servicio
+    fetch("components/card-servicios.html")
+      .then(res => res.text())
+      .then(templateHTML => {
+        const contenedorGrid = document.getElementById("cards-container");
+
+        listadoServicios.forEach(servicio => {
+          const columnaBootstrap = document.createElement("div");
+
+          /* 🎯 MODIFICADO: Adaptamos el comportamiento responsive de las columnas */
+          columnaBootstrap.className = "col-12 col-sm-6 col-md-6 col-lg-4 d-flex justify-content-center";
+          columnaBootstrap.innerHTML = templateHTML;
+
+          columnaBootstrap.querySelector(".js-card-title").textContent = servicio.title;
+          columnaBootstrap.querySelector(".js-card-text").innerHTML = servicio.desc;
+
+          const imagenElemento = columnaBootstrap.querySelector(".js-card-img");
+          if (imagenElemento) {
+            imagenElemento.src = servicio.img;
+            imagenElemento.alt = servicio.title;
+          }
+
+          contenedorGrid.appendChild(columnaBootstrap);
+        });
+      })
+      .catch(error => console.error("Error generando las tarjetas de servicio:", error));
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+
+</html>

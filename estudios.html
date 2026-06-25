@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LACSMA | Corporativo de Calidad y Ensayos de Materiales S.A. de C.V</title>
+  <meta name="description"
+    content="Corporativo de Calidad y Ensayos de Materiales S.A. de C.V">
+  <meta property="og:description" content="Análisis y verificación de materiales para la construcción." />
+  <meta property="og:image" content="https://www.lacsma.com/assets/img/icon/Pat1.webp" />
+  <meta property="og:url" content="https://www.lacsma.com" />
+  <meta name="google-site-verification" content="JpkveYw6j71CssFyLHKTZXr5G9u0O4o76n-1fP68Lyc" />
+  <link rel="icon" type="image/x-icon" href="assets/img/icon/fav.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/img/icon/apple-touch-icon.png">
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+
+  <link href="https://fonts.googleapis.com/css2?family=Teko:wght@400&family=Inter:wght@400;500&display=swap"
+    rel="stylesheet" />
+
+  <link rel="stylesheet" href="assets/css/styles.css?v=1.1">
+</head>
+
+<body>
+
+  <header id="navbar"></header>
+
+  <main>
+
+    <div id="banner-service"></div>
+
+    <section class="lacsma-section py-5">
+      <div class="container-fluid px-4 px-lg-5">
+
+        <div id="cards-container" class="row g-4 justify-content-center">
+        </div>
+
+        <div id="button-load-more"></div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <footer id="footer"></footer>
+
+  <script>
+    // 1. Cargar Navbar
+    fetch("components/navbar.html")
+      .then(res => res.text())
+      .then(data => {
+        document.getElementById("navbar").innerHTML = data;
+      })
+      .catch(error => console.error("Error cargando el navbar:", error));
+
+    // 🎯 2. CORREGIDO: Carga del banner principal limpia e inmediata, anulando fondos del CSS minificado
+    fetch("components/banner.html")
+      .then(res => res.text())
+      .then(data => {
+        const contenedorBanner = document.getElementById("banner-service");
+        contenedorBanner.innerHTML = data;
+        
+        // 🌟 Forzamos la desactivación de cualquier color o imagen de fondo residual del CSS heredado
+        contenedorBanner.style.backgroundImage = "none";
+        contenedorBanner.style.backgroundColor = "transparent";
+        
+        const bannerElement = contenedorBanner.querySelector(".lacsma-banner");
+        if (bannerElement) {
+          bannerElement.style.backgroundImage = "none";
+          bannerElement.style.backgroundColor = "transparent";
+        }
+        
+        /* 🚀 Usamos los selectores de clase correctos de tu componente banner.html */
+        const tituloBanner = contenedorBanner.querySelector(".banner__title");
+        const subtituloBanner = contenedorBanner.querySelector(".banner__description");
+        const imagenBanner = contenedorBanner.querySelector(".banner__photo");
+
+        if (tituloBanner) {
+            tituloBanner.textContent = "Estudios especiales";
+        }
+        if (subtituloBanner) {
+            /* 🎯 CORREGIDO: Se usa .innerHTML para inyectar el punto de color sin que desaparezca */
+            subtituloBanner.innerHTML = `
+            <span class="punto-color">&bull;</span> 
+            Servicios avanzados para garantizar la calidad y durabilidad de las construcciones`;
+        }
+
+        /* 📸 ASIGNACIÓN DIRECTA: Carga rápida de la imagen con medidas estables */
+        if (imagenBanner) {
+          imagenBanner.src = "assets/img/estudiosbanner.webp";
+          imagenBanner.alt = "Estudios especiales - LACSMA";
+          imagenBanner.setAttribute("width", "1920");
+          imagenBanner.setAttribute("height", "450");
+         
+        }
+      })
+      .catch(error => console.error("Error cargando el banner:", error));
+
+    // 3. CARGAR TARJETAS DE SERVICIOS AUTOMÁTICAMENTE
+    const listadoServicios = [
+      {
+        title: "Mecánica de suelos",
+        desc: "Estudio que permite conocer las características del terreno sobre el cual será cimentado. Los estudios de mecánica de suelos permiten determinar propiedades físicas y mecánicas del subsuelo mediante exploración de campo, obtención de muestras y ensayos de laboratorio.<br><span class='text-normativa'>NMX-C-526-ONNCE, NMX-C-493-ONNCCE, NMX-C-476-ONNCCE, NMX-C-522-ONNCE.</span>",
+        img: "assets/img/mecanicasuelos.webp"
+      },
+      {
+        title: "Control de plantas asfálticas y concreto hidráulico",
+        desc: "La calidad de una obra comienza desde la producción de sus materiales. El control de plantas consiste en supervisar y verificar los procesos de fabricación de concreto hidráulico y mezclas asfálticas, así como la calidad de las materias primas empleadas.<br><span class='text-normativa'>Normatividad aplicable: Conforme a las especificaciones particulares del proyecto y a las normas aplicables para concreto hidráulico, agregados, asfaltos y mezclas asfálticas.</span>",
+        img: "assets/img/plantas.webp"
+      }
+    ];
+
+    // 4. Jalamos el molde único de tu card-servicio
+    fetch("components/card-servicios.html")
+      .then(res => res.text())
+      .then(templateHTML => {
+        const contenedorGrid = document.getElementById("cards-container");
+
+        listadoServicios.forEach(servicio => {
+          const columnaBootstrap = document.createElement("div");
+          
+          /* 🎯 MODIFICADO: Agregamos col-md-6 para 2 por fila en laptops y col-lg-4 para 3 en monitores */
+          columnaBootstrap.className = "col-12 col-sm-6 col-md-6 col-lg-4 d-flex justify-content-center";
+          columnaBootstrap.innerHTML = templateHTML;
+
+          columnaBootstrap.querySelector(".js-card-title").textContent = servicio.title;
+          
+          /* 🎯 CORREGIDO: Se usa .innerHTML para que las descripciones acepten formatos */
+          columnaBootstrap.querySelector(".js-card-text").innerHTML = servicio.desc;
+
+          const imagenElemento = columnaBootstrap.querySelector(".js-card-img");
+          
+          /* 🎯 CORREGIDO: Mantiene la imagen independiente asignada en el arreglo listadoServicios */
+          if (imagenElemento) {
+            imagenElemento.src = servicio.img;
+            imagenElemento.alt = servicio.title;
+          }
+
+          contenedorGrid.appendChild(columnaBootstrap);
+        });
+      })
+      .catch(error => console.error("Error generando las tarjetas de servicio:", error));
+
+    // 5. Cargar el componente Botón Ver Más de forma dinámica
+    fetch("components/boton-ver-mas.html") 
+      .then(res => res.text())
+      .then(data => {
+        document.getElementById("button-load-more").innerHTML = data;
+      })
+      .catch(error => console.error("Error cargando el componente boton-ver-mas:", error));
+
+    // 6. Cargar el componente del Footer de forma dinámica
+    fetch("components/footer.html")
+      .then(res => res.text())
+      .then(data => {
+        document.getElementById("footer").innerHTML = data;
+      })
+      .catch(error => console.error("Error cargando el componente del footer:", error));
+  </script>
+  
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+
+</html>
